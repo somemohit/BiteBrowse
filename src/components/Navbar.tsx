@@ -1,7 +1,7 @@
-
 import {NavLink, useLocation, useNavigate} from 'react-router-dom';
 // import {GiHamburgerMenu} from 'react-icons/gi';
 import {Link} from 'react-router-dom';
+import {IoSearch} from 'react-icons/io5';
 
 const Navbar = () => {
   // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,11 +20,19 @@ const Navbar = () => {
     },
   ];
 
+  const handleScroll = () => {
+    const element = document.getElementById('target-section');
+    if (element) {
+      element.focus();
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+  };
+
   console.log(location?.pathname, 'location');
 
   return (
     <>
-      <div className="z-50 w-full bg-gray-700 text-white p-4">
+      <div className="z-50 w-full bg-gray-700 text-white px-10 py-4">
         <div className="flex justify-between">
           {/* Logo */}
           <Link
@@ -56,6 +64,9 @@ const Navbar = () => {
                 </>
               );
             })}
+            <button onClick={handleScroll} className="">
+              <IoSearch className="" />
+            </button>
           </div>
         </div>
 
