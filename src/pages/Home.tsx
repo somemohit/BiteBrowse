@@ -8,6 +8,7 @@ import {BiWorld} from 'react-icons/bi';
 import {MdCategory} from 'react-icons/md';
 import {FiExternalLink} from 'react-icons/fi';
 import {homepageImages} from '../modules/constants';
+import {useNavigate} from 'react-router-dom';
 
 const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -18,6 +19,7 @@ const Home = () => {
 
   const {setWatchHistory} = useContext(watchHistoryContext);
   const debouncedSearchText = useDebounce(query, 500);
+  const navigate = useNavigate();
 
   const handleSearchChange = (e) => {
     setQuery(e.target.value);
@@ -55,6 +57,11 @@ const Home = () => {
       localStorage?.setItem('watchHistory', JSON.stringify(updatedHistory));
       return updatedHistory;
     });
+    navigate(`/recipe/${recipe?.idMeal}`);
+  };
+
+  const handleRecipeTodayCardClick = (id) => {
+    navigate(`/recipe/${id}`);
   };
 
   const getRandomImage = () => {
@@ -70,10 +77,6 @@ const Home = () => {
     getRandomImage();
     fetchRandomRecipe();
   }, []);
-
-  useEffect(() => {
-    if (debouncedSearchText) fetchRecipeData();
-  }, [debouncedSearchText]);
 
   return (
     <>
@@ -105,9 +108,14 @@ const Home = () => {
 
           {!recipes?.length ? (
             <div>
-              <p className="text-3xl font-poppins font-bold text-gray-500">
+              <p className="text-3xl font-poppins text-gray-500">
                 Your culinary adventure starts with a simple search!
-              </p>{' '}
+              </p>
+              <img
+                src={'../src/assets/search-alt.png'}
+                className="w-2/5 object-cover object-center rounded-tl-md rounded-bl-md h-80 mx-auto my-6"
+                alt="meal-img"
+              />
             </div>
           ) : loading ? (
             <div className="flex flex-wrap justify-center items-start gap-5 sm:gap-7 md:gap-7 max-w-full sm:max-w-11/12 px-4 sm:px-4 py-4 sm:py-8">
@@ -173,21 +181,22 @@ const Home = () => {
         </div>
 
         <div className="w-full py-12 flex flex-col items-center justify-center gap-4">
-          <p>Today's recipe</p>
-          <div className="flex items-center h-fit min-h-[500px] shadow-new rounded-md w-8/12 text-gray-500 font-poppins">
-            <img
-              src={
-                randomRecipe?.strMealThumb
-                  ? randomRecipe?.strMealThumb
-                  : 'no-img.jpg'
-              }
-              className="w-2/5 object-cover object-center rounded-tl-md rounded-bl-md h-full"
-              alt="meal-img"
-            />
+          <p className="text-gray-500 text-5xl mb-2">Today's recipe</p>
+          <div
+            onClick={() => handleRecipeTodayCardClick(randomRecipe?.idMeal)}
+            className="flex items-center h-auto shadow-new rounded-md w-8/12 text-gray-500 font-poppins cursor-pointer"
+          >
+            <div className="w-2/5 h-full">
+              <img
+                src={randomRecipe?.strMealThumb || 'no-img.jpg'}
+                className="w-full h-full object-cover object-center rounded-tl-md rounded-bl-md"
+                alt="meal-img"
+              />
+            </div>
             <div className="w-3/5 flex flex-col gap-6 p-6">
-              <p className='text-2xl'>{randomRecipe?.strMeal}</p>
-              <p className='text-sm'>{randomRecipe?.strInstructions}</p>
-              <p className='text-base'>{randomRecipe?.strTags}</p>
+              <p className="text-2xl">{randomRecipe?.strMeal}</p>
+              <p className="text-sm">{randomRecipe?.strInstructions}</p>
+              <p className="text-base">{randomRecipe?.strTags}</p>
             </div>
           </div>
         </div>

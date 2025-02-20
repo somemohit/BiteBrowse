@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import WatchHistory from './pages/watch-history';
 import {createContext, useState} from 'react';
+import Recipe from './pages/Recipe';
 
 const watchHistoryContext = createContext('');
 
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/watch-history" element={<WatchHistory />} />
+          <Route path="/recipe/:id" element={<Recipe />} />
         </Routes>
       </watchHistoryContext.Provider>
     </>

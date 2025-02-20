@@ -1,19 +1,29 @@
 import {useContext} from 'react';
 import {watchHistoryContext} from '../App';
+import {useNavigate} from 'react-router-dom';
 
 const WatchHistory = () => {
+  const navigate = useNavigate();
   const {watchHistory} = useContext(watchHistoryContext);
+
+  const handleHistoryCardClick = (mealId) => {
+    navigate(`/recipe/${mealId}`);
+  };
+
   return (
     <>
       <div className="flex flex-col gap-4 items-center my-4">
         <h1 className="text-4xl font-bold font-poppins text-gray-500">
           Watch History
         </h1>
-        <div className='pb-10 w-full mx-auto flex flex-col justify-center items-center gap-5'>
+        <div className="pb-10 w-full mx-auto flex flex-col justify-center items-center gap-5">
           {watchHistory?.map((data) => {
             return (
               <>
-                <div className="bg-gray-200 rounded-lg w-3/5 flex gap-4 items-center shadow-lg p-2 hover:scale-105 duration-200 cursor-pointer">
+                <div
+                  onClick={() => handleHistoryCardClick(data?.idMeal)}
+                  className="bg-gray-200 rounded-lg w-3/5 flex gap-4 items-center shadow-lg p-2 hover:scale-105 duration-200 cursor-pointer"
+                >
                   <img
                     src={`${
                       data?.strMealThumb
