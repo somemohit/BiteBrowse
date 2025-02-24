@@ -82,18 +82,18 @@ const Home = () => {
     <>
       <div className="bg-white min-h-screen">
         <div
-          className="h-screen bg-cover bg-center w-full flex justify-center px-12 py-8"
+          className="h-96 sm:h-screen bg-cover bg-center w-full flex justify-center px-12 py-8"
           style={{
             backgroundImage: `url(${randomHomeImage})`,
           }}
         >
-          <p className="text-8xl font-bold text-white mt-32 font-poppins drop-shadow-xl w-full text-center">
+          <p className="text-4xl sm:text-5xl md:text-8xl font-bold text-white mt-12 sm:mt-32 font-poppins drop-shadow-xl w-full text-center">
             Discover tasty recipes everyday
           </p>
         </div>
 
-        <div className="flex flex-col gap-8 px-12 py-8 items-center text-gray-500">
-          <p className="text-5xl font-bold font-poppins">
+        <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12 py-8 items-center text-gray-500">
+          <p className="text-xl sm:text-4xl md:text-5xl font-bold font-poppins">
             Search Your Favourite Recipes
           </p>
           <div className="flex justify-center items-center border-2 border-gray-500 rounded-full w-10/11 sm:w-6/11">
@@ -101,14 +101,14 @@ const Home = () => {
               id="target-section"
               type="text"
               placeholder="Search..."
-              className="outline-none px-6 w-full h-16 rounded-full"
+              className="outline-none px-6 w-full h-12 sm:h-14 md:h-16 rounded-full"
               onChange={handleSearchChange}
             />
           </div>
 
           {!recipes?.length ? (
             <div>
-              <p className="text-3xl font-poppins text-gray-500">
+              <p className="text-xl sm:text-2xl md:text-3xl font-poppins text-gray-500 text-center">
                 Your culinary adventure starts with a simple search!
               </p>
               <img
@@ -166,11 +166,13 @@ const Home = () => {
                     </div>
                     <a
                       href={r?.strSource}
+                      onClick={(e) => e.stopPropagation()}
+                      target="_blank"
                       className="text-sm text-gray-500 hover:text-gray-700 mx-auto flex gap-1 items-center"
                     >
                       <FiExternalLink /> Link
                     </a>
-                    <button className="w-1/2 mx-auto text-xs rounded-md px-4 py-2 bg-gray-400 hover:bg-gray-500 duration-300 ease-in-out text-white">
+                    <button className="cursor-pointer w-1/2 mx-auto text-xs rounded-md px-4 py-2 bg-gray-400 hover:bg-gray-500 duration-300 ease-in-out text-white">
                       View Recipe
                     </button>
                   </div>
@@ -180,20 +182,20 @@ const Home = () => {
           )}
         </div>
 
-        <div className="w-full py-12 flex flex-col items-center justify-center gap-4">
-          <p className="text-gray-500 text-5xl mb-2">Today's recipe</p>
+        <div className="w-full py-6 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4">
+          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-2">Today's recipe</p>
           <div
             onClick={() => handleRecipeTodayCardClick(randomRecipe?.idMeal)}
-            className="flex items-center h-auto shadow-new rounded-md w-8/12 text-gray-500 font-poppins cursor-pointer"
+            className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
           >
-            <div className="w-2/5 h-full">
+            <div className="w-full sm:w-2/5 h-full">
               <img
                 src={randomRecipe?.strMealThumb || 'no-img.jpg'}
-                className="w-full h-full object-cover object-center rounded-tl-md rounded-bl-md"
+                className="w-full h-full object-cover object-center rounded-tl-md rounded-tr-md sm:rounded-tr-none rounded-bl-none sm:rounded-bl-md"
                 alt="meal-img"
               />
             </div>
-            <div className="w-3/5 flex flex-col gap-6 p-6">
+            <div className="w-full sm:w-3/5 flex flex-col gap-6 p-6">
               <p className="text-2xl">{randomRecipe?.strMeal}</p>
               <p className="text-sm">{randomRecipe?.strInstructions}</p>
               <p className="text-base">{randomRecipe?.strTags}</p>

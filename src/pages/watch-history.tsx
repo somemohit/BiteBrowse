@@ -13,7 +13,7 @@ const WatchHistory = () => {
   return (
     <>
       <div className="flex flex-col gap-4 items-center my-4">
-        <h1 className="text-4xl font-bold font-poppins text-gray-500">
+        <h1 className="text-2xl sm:text-4xl font-bold font-poppins text-gray-500">
           Watch History
         </h1>
         <div className="pb-10 w-full mx-auto flex flex-col justify-center items-center gap-5">
@@ -22,7 +22,7 @@ const WatchHistory = () => {
               <>
                 <div
                   onClick={() => handleHistoryCardClick(data?.idMeal)}
-                  className="bg-gray-200 rounded-lg w-3/5 flex gap-4 items-center shadow-lg p-2 hover:scale-105 duration-200 cursor-pointer"
+                  className="bg-gray-200 rounded-lg w-11/12 sm:w-3/5 flex gap-4 items-center shadow-lg p-2 hover:scale-105 duration-200 cursor-pointer"
                 >
                   <img
                     src={`${
@@ -34,7 +34,7 @@ const WatchHistory = () => {
                     alt="history-image"
                   />
                   <div>
-                    <p className="truncate w-96">{data?.strMeal}</p>
+                    <p className="truncate w-96 text-sm sm:text-base">{data?.strMeal}</p>
                     <p className="text-xs text-gray-700">
                       Category: {data?.strCategory}
                     </p>
