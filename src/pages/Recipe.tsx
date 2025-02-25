@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {recipe} from '../modules/ApiLinks';
 import axios from 'axios';
@@ -28,15 +28,16 @@ const Recipe = () => {
 
   useEffect(() => {
     fetchRecipeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (
     <>
       {loading ? (
         <div className="flex items-center justify-center my-6">
-          <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-8/12 text-gray-500">
+          <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500">
             <div className="w-full h-80 bg-slate-300 animate-pulse rounded-md"></div>
-            <div className="flex gap-2 justify-between items-center">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 justify-between items-center">
               <div className="flex gap-4 items-center">
                 <p className="bg-slate-300 animate-pulse h-6 w-20 rounded-md"></p>
                 <p className="bg-slate-300 animate-pulse h-6 w-20 rounded-md"></p>
@@ -61,7 +62,10 @@ const Recipe = () => {
         </div>
       ) : (
         <div className="relative flex items-center justify-center my-3 sm:my-6">
-          <button onClick={() => navigate(-1)} className="absolute -top-6 sm:top-0 left-2 sm:left-20 cursor-pointer text-3xl text-gray-500">
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute -top-6 sm:top-0 left-2 sm:left-20 cursor-pointer text-3xl text-gray-500"
+          >
             <MdOutlineKeyboardBackspace />
           </button>
           <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500">
@@ -74,12 +78,14 @@ const Recipe = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 justify-between items-center">
               <div className="flex gap-4 items-center">
-                <p className="">
-                  <span className="font-bold">Area: </span>
+                <p className="text-sm sm:text-base">
+                  <span className="font-bold text-sm sm:text-base">Area: </span>
                   {recipeInfo?.strArea}
                 </p>
-                <p className="">
-                  <span className="font-bold">Category: </span>
+                <p className=" text-sm sm:text-base">
+                  <span className="font-bold text-sm sm:text-base">
+                    Category:{' '}
+                  </span>
                   {recipeInfo?.strCategory}
                 </p>
               </div>
@@ -112,7 +118,9 @@ const Recipe = () => {
 
             <div className="w-full flex flex-col gap-2">
               <p className="text-base sm:text-2xl">{recipeInfo?.strMeal}</p>
-              <p className="text-xs sm:text-sm">{recipeInfo?.strInstructions}</p>
+              <p className="text-xs sm:text-sm">
+                {recipeInfo?.strInstructions}
+              </p>
               {recipeInfo?.strTags ? (
                 <p className="text-base">
                   <span className="font-bold">Tags: </span>

@@ -96,7 +96,7 @@ const Home = () => {
           <p className="text-xl sm:text-4xl md:text-5xl font-bold font-poppins">
             Search Your Favourite Recipes
           </p>
-          <div className="flex justify-center items-center border-2 border-gray-500 rounded-full w-10/11 sm:w-6/11">
+          <div className="flex justify-center items-center border-2 border-gray-500 rounded-full w-full sm:w-6/11">
             <input
               id="target-section"
               type="text"
@@ -106,14 +106,14 @@ const Home = () => {
             />
           </div>
 
-          {!recipes?.length ? (
+          {!recipes?.length && !loading ? (
             <div>
-              <p className="text-xl sm:text-2xl md:text-3xl font-poppins text-gray-500 text-center">
+              <p className="text-lg sm:text-2xl md:text-3xl font-poppins text-gray-500 text-center">
                 Your culinary adventure starts with a simple search!
               </p>
               <img
                 src={'../src/assets/search-alt.png'}
-                className="w-2/5 object-cover object-center rounded-tl-md rounded-bl-md h-80 mx-auto my-6"
+                className="w-auto sm:w-2/5 object-cover object-center rounded-md h-44 sm:h-80 mx-auto my-0 sm:my-6"
                 alt="meal-img"
               />
             </div>
@@ -122,7 +122,7 @@ const Home = () => {
               {[0, 0, 0, 0, 0, 0]?.map((r) => (
                 <div
                   key={r?.idMeal}
-                  className="relative cursor-pointer rounded-md shadow-new h-[450px] min-w-[150px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px]"
+                  className="relative cursor-pointer rounded-md shadow-new h-[450px] min-w-full sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px]"
                 >
                   <div className="bg-slate-300 animate-pulse w-full object-cover object-center rounded-tl-md rounded-tr-md h-3/5"></div>
                   <div className="p-4 flex flex-col gap-2 w-full">
@@ -170,7 +170,7 @@ const Home = () => {
                       target="_blank"
                       className="text-sm text-gray-500 hover:text-gray-700 mx-auto flex gap-1 items-center"
                     >
-                      <FiExternalLink /> Link
+                      <FiExternalLink /> Source
                     </a>
                     <button className="cursor-pointer w-1/2 mx-auto text-xs rounded-md px-4 py-2 bg-gray-400 hover:bg-gray-500 duration-300 ease-in-out text-white">
                       View Recipe
@@ -182,8 +182,10 @@ const Home = () => {
           )}
         </div>
 
-        <div className="w-full py-6 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4">
-          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-2">Today's recipe</p>
+        <div className="w-full py-1 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4">
+          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-2">
+            Today's recipe
+          </p>
           <div
             onClick={() => handleRecipeTodayCardClick(randomRecipe?.idMeal)}
             className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
