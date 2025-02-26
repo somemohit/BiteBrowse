@@ -9,26 +9,29 @@ import {MdCategory} from 'react-icons/md';
 import {FiExternalLink} from 'react-icons/fi';
 import {homepageImages} from '../modules/constants';
 import {useNavigate} from 'react-router-dom';
+import {Recipe, RecipeInfoType, RecipeResponse} from '../modules/types';
 
 const Home = () => {
-  const [recipes, setRecipes] = useState([]);
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState('');
-  const [randomHomeImage, setRandomHomeImage] = useState('');
-  const [randomRecipe, setRandomRecipe] = useState('');
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [query, setQuery] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [randomHomeImage, setRandomHomeImage] = useState<string>('');
+  const [randomRecipe, setRandomRecipe] = useState<Recipe | null>(null);
 
-  const {setWatchHistory} = useContext(watchHistoryContext);
+  const {setWatchHistory} = useContext(watchHistoryContext)!;
   const debouncedSearchText = useDebounce(query, 500);
   const navigate = useNavigate();
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setQuery(e.target.value);
   };
 
-  const fetchRecipeData = async () => {
+  const fetchRecipeData = async (): Promise<void> => {
     setLoading(true);
     try {
-      const response = await axios.get(searchMeal(debouncedSearchText));
+      const response = await axios.get<RecipeResponse>(
+        searchMeal(debouncedSearchText)
+      );
       setLoading(false);
       setRecipes(response?.data?.meals);
       console.log(response);
@@ -38,7 +41,7 @@ const Home = () => {
     }
   };
 
-  const fetchRandomRecipe = async () => {
+  const fetchRandomRecipe = async (): Promise<void> => {
     try {
       const response = await axios.get(randomMeal);
       setRandomRecipe(response?.data?.meals[0]);
@@ -48,8 +51,8 @@ const Home = () => {
     }
   };
 
-  const handleRecipeCardClick = (recipe) => {
-    setWatchHistory((prev) => {
+  const handleRecipeCardClick = (recipe: Recipe) => {
+    setWatchHistory((prev: RecipeInfoType[]) => {
       const updatedHistory = [
         recipe,
         ...prev.filter((r) => r?.idMeal !== recipe?.idMeal),
@@ -60,17 +63,21 @@ const Home = () => {
     navigate(`/recipe/${recipe?.idMeal}`);
   };
 
-  const handleRecipeTodayCardClick = (id) => {
-    navigate(`/recipe/${id}`);
-  };
-
   const getRandomImage = () => {
     const randomIndex = Math.floor(Math.random() * homepageImages.length);
     return setRandomHomeImage(homepageImages[randomIndex]);
   };
 
+  const handleScrollToRecipe = (): void => {
+    const element = document.getElementById('today-recipe');
+    if (element) {
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+  };
+
   useEffect(() => {
     if (debouncedSearchText) fetchRecipeData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText]);
 
   useEffect(() => {
@@ -82,14 +89,20 @@ const Home = () => {
     <>
       <div className="bg-white min-h-screen">
         <div
-          className="h-96 sm:h-screen bg-cover bg-center w-full flex justify-center px-12 py-8"
+          className="h-96 sm:h-screen bg-cover bg-center w-full flex flex-col items-center gap-16 justify-center px-12 py-8"
           style={{
             backgroundImage: `url(${randomHomeImage})`,
           }}
         >
-          <p className="text-4xl sm:text-5xl md:text-8xl font-bold text-white mt-12 sm:mt-32 font-poppins drop-shadow-xl w-full text-center">
+          <p className="text-4xl sm:text-5xl md:text-8xl font-bold text-white  font-poppins drop-shadow-xl w-full text-center">
             Discover tasty recipes everyday
           </p>
+          <button
+            onClick={handleScrollToRecipe}
+            className="w-2/3 sm:w-1/3 rounded-full bg-transparent hover:backdrop-blur-md cursor-pointer px-3 py-2 sm:py-4 text-sm sm:text-3xl duration-300 text-white hover:text-white ring-2 ring-white focus:outline-none"
+          >
+            Chef's Special
+          </button>
         </div>
 
         <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12 py-8 items-center text-gray-500">
@@ -119,9 +132,9 @@ const Home = () => {
             </div>
           ) : loading ? (
             <div className="flex flex-wrap justify-center items-start gap-5 sm:gap-7 md:gap-7 max-w-full sm:max-w-11/12 px-4 sm:px-4 py-4 sm:py-8">
-              {[0, 0, 0, 0, 0, 0]?.map((r) => (
+              {[0, 1, 2, 3, 4, 5]?.map((r) => (
                 <div
-                  key={r?.idMeal}
+                  key={r}
                   className="relative cursor-pointer rounded-md shadow-new h-[450px] min-w-full sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px]"
                 >
                   <div className="bg-slate-300 animate-pulse w-full object-cover object-center rounded-tl-md rounded-tr-md h-3/5"></div>
@@ -182,12 +195,15 @@ const Home = () => {
           )}
         </div>
 
-        <div className="w-full py-1 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4">
+        <div
+          id="today-recipe"
+          className="w-full pt-1 pb-4 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4"
+        >
           <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-2">
             Today's recipe
           </p>
           <div
-            onClick={() => handleRecipeTodayCardClick(randomRecipe?.idMeal)}
+            onClick={() => randomRecipe && handleRecipeCardClick(randomRecipe)}
             className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
           >
             <div className="w-full sm:w-2/5 h-full">
@@ -197,10 +213,12 @@ const Home = () => {
                 alt="meal-img"
               />
             </div>
-            <div className="w-full sm:w-3/5 flex flex-col gap-6 p-6">
-              <p className="text-2xl">{randomRecipe?.strMeal}</p>
-              <p className="text-sm">{randomRecipe?.strInstructions}</p>
-              <p className="text-base">{randomRecipe?.strTags}</p>
+            <div className="w-full sm:w-3/5 flex flex-col gap-2 sm:gap-6 p-6">
+              <p className="text-xl sm:text-2xl">{randomRecipe?.strMeal}</p>
+              <p className="text-xs sm:text-sm">
+                {randomRecipe?.strInstructions}
+              </p>
+              <p className="text-sm sm:text-base">{randomRecipe?.strTags}</p>
             </div>
           </div>
         </div>
