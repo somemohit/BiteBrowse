@@ -5,10 +5,11 @@ import axios from 'axios';
 import {FaExternalLinkAlt} from 'react-icons/fa';
 import {FaPlay} from 'react-icons/fa';
 import {MdOutlineKeyboardBackspace} from 'react-icons/md';
+import {RecipeInfoType} from '../modules/types';
 
 const Recipe = () => {
-  const [loading, setLoading] = useState('');
-  const [recipeInfo, setRecipeInfo] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [recipeInfo, setRecipeInfo] = useState<RecipeInfoType>();
 
   const {id} = useParams();
   const navigate = useNavigate();
@@ -133,7 +134,7 @@ const Recipe = () => {
             <div className="flex gap-4 text-sm">
               <ul>
                 {Array.from({length: 20}, (_, i) => i + 1)
-                  .map((i) => recipeInfo[`strIngredient${i}`])
+                  .map((i) => recipeInfo?.[`strIngredient${i}`])
                   .filter(Boolean)
                   .map((ingredient, index) => (
                     <li key={index}>{ingredient} :</li>
@@ -141,7 +142,7 @@ const Recipe = () => {
               </ul>
               <ul>
                 {Array.from({length: 20}, (_, i) => i + 1)
-                  .map((i) => recipeInfo[`strMeasure${i}`])
+                  .map((i) => recipeInfo?.[`strMeasure${i}`])
                   .filter(Boolean)
                   .map((measure, index) => (
                     <li key={index}>{measure}</li>

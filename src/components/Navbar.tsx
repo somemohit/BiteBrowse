@@ -1,4 +1,5 @@
-import {NavLink, useLocation, useNavigate} from 'react-router-dom';
+import {NavLink, useLocation} from 'react-router-dom';
+// import {useNavigate} from 'react-router-dom';
 // import {GiHamburgerMenu} from 'react-icons/gi';
 import {Link} from 'react-router-dom';
 import {IoSearch} from 'react-icons/io5';
@@ -10,7 +11,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const pathNameArr = [
     {
@@ -94,6 +95,7 @@ const Navbar = () => {
                     ? 'text-red-500 scale-105'
                     : ''
                 } text-lg hover:text-red-500 font-poppins font-semibold text-center`}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {pathObj?.pathName}
               </NavLink>

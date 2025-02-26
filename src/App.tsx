@@ -5,12 +5,15 @@ import Navbar from './components/Navbar';
 import WatchHistory from './pages/watch-history';
 import {createContext, useState} from 'react';
 import Recipe from './pages/Recipe';
+import {RecipeInfoType, WatchHistoryContextType} from './modules/types';
 
-const watchHistoryContext = createContext('');
+const watchHistoryContext = createContext<WatchHistoryContextType | undefined>(
+  undefined
+);
 
 function App() {
-  const [watchHistory, setWatchHistory] = useState(
-    JSON.parse(localStorage.getItem('watchHistory')) || []
+  const [watchHistory, setWatchHistory] = useState<RecipeInfoType[]>(
+    JSON.parse(localStorage.getItem('watchHistory') || '[]')
   );
 
   return (
@@ -28,4 +31,5 @@ function App() {
 }
 
 export default App;
-export {watchHistoryContext}
+// eslint-disable-next-line react-refresh/only-export-components
+export {watchHistoryContext};
