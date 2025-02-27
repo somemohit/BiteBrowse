@@ -24,10 +24,10 @@ export interface RecipeInfoType {
 }
 
 export interface RecipeResponse {
-  meals: Recipe[];
+  meals: RecipeInfoType[];
 }
 
 export interface WatchHistoryContextType {
   setWatchHistory: React.Dispatch<React.SetStateAction<RecipeInfoType[]>>;
-  watchHistory: [];
+  watchHistory: RecipeInfoType[];
 }
