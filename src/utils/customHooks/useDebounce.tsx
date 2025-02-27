@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-const useDebounce = (inputText, delay) => {
+const useDebounce = (inputText: string, delay: number): string => {
   const [debouncedText, setDebouncedText] = useState('');
 
   useEffect(() => {
@@ -8,6 +8,7 @@ const useDebounce = (inputText, delay) => {
       setDebouncedText(inputText);
     }, delay);
     return () => clearTimeout(timeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputText]);
   return debouncedText;
 };

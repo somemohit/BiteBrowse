@@ -9,14 +9,14 @@ import {MdCategory} from 'react-icons/md';
 import {FiExternalLink} from 'react-icons/fi';
 import {homepageImages} from '../modules/constants';
 import {useNavigate} from 'react-router-dom';
-import {Recipe, RecipeInfoType, RecipeResponse} from '../modules/types';
+import {RecipeInfoType, RecipeResponse} from '../modules/types';
 
 const Home = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<RecipeInfoType[]>([]);
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [randomHomeImage, setRandomHomeImage] = useState<string>('');
-  const [randomRecipe, setRandomRecipe] = useState<Recipe | null>(null);
+  const [randomRecipe, setRandomRecipe] = useState<RecipeInfoType | null>(null);
 
   const {setWatchHistory} = useContext(watchHistoryContext)!;
   const debouncedSearchText = useDebounce(query, 500);
@@ -51,7 +51,7 @@ const Home = () => {
     }
   };
 
-  const handleRecipeCardClick = (recipe: Recipe) => {
+  const handleRecipeCardClick = (recipe: RecipeInfoType) => {
     setWatchHistory((prev: RecipeInfoType[]) => {
       const updatedHistory = [
         recipe,
