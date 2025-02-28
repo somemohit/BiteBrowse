@@ -62,10 +62,10 @@ const Recipe = () => {
           </div>
         </div>
       ) : (
-        <div className="relative flex items-center justify-center my-3 sm:my-6">
+        <div className="relative flex items-center justify-center my-7 sm:my-6">
           <button
             onClick={() => navigate(-1)}
-            className="absolute -top-6 sm:top-0 left-2 sm:left-20 cursor-pointer text-3xl text-gray-500"
+            className="absolute -top-8 sm:top-0 left-2 sm:left-20 cursor-pointer text-3xl text-gray-500"
           >
             <MdOutlineKeyboardBackspace />
           </button>
@@ -123,7 +123,7 @@ const Recipe = () => {
                 {recipeInfo?.strInstructions}
               </p>
               {recipeInfo?.strTags ? (
-                <p className="text-base">
+                <p className="text-sm sm:text-base">
                   <span className="font-bold">Tags: </span>
                   {recipeInfo?.strTags}
                 </p>
