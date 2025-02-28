@@ -38,7 +38,7 @@ const WatchHistory = () => {
                       alt="history-image"
                     />
                     <div>
-                      <p className="truncate sm:w-96 text-sm sm:text-base">
+                      <p className="truncate w-40 sm:w-96 text-sm sm:text-base">
                         {data?.strMeal}
                       </p>
                       <p className="text-xs text-gray-700">

@@ -7,7 +7,7 @@ import {watchHistoryContext} from '../App';
 import {BiWorld} from 'react-icons/bi';
 import {MdCategory} from 'react-icons/md';
 import {FiExternalLink} from 'react-icons/fi';
-import {homepageImages} from '../modules/constants';
+import {homepageImages, limitText} from '../modules/constants';
 import {useNavigate} from 'react-router-dom';
 import {RecipeInfoType, RecipeResponse} from '../modules/types';
 
@@ -15,6 +15,8 @@ const Home = () => {
   const [recipes, setRecipes] = useState<RecipeInfoType[]>([]);
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingRandomRecipe, setLoadingRandomRecipe] =
+    useState<boolean>(false);
   const [randomHomeImage, setRandomHomeImage] = useState<string>('');
   const [randomRecipe, setRandomRecipe] = useState<RecipeInfoType | null>(null);
 
@@ -42,11 +44,14 @@ const Home = () => {
   };
 
   const fetchRandomRecipe = async (): Promise<void> => {
+    setLoadingRandomRecipe(true);
     try {
       const response = await axios.get(randomMeal);
       setRandomRecipe(response?.data?.meals[0]);
+      setLoadingRandomRecipe(false);
       console.log(response, 'asfa');
     } catch (error) {
+      setLoadingRandomRecipe(false);
       console.log(error);
     }
   };
@@ -99,9 +104,12 @@ const Home = () => {
           </p>
           <button
             onClick={handleScrollToRecipe}
-            className="w-2/3 sm:w-1/3 rounded-full bg-transparent hover:backdrop-blur-md cursor-pointer px-3 py-2 sm:py-4 text-sm sm:text-3xl duration-300 text-white hover:text-white ring-2 ring-white focus:outline-none"
+            className="relative w-2/3 sm:w-1/3 inline-flex overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
           >
-            Chef's Special
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+            <span className="inline-flex h-full w-full  px-3 py-2 sm:py-4 cursor-pointer items-center justify-center rounded-full bg-slate-950 hover:bg-slate-800 duration-300 text-sm sm:text-3xl font-medium text-white backdrop-blur-3xl">
+              Chef's Special
+            </span>
           </button>
         </div>
 
@@ -125,7 +133,7 @@ const Home = () => {
                 Your culinary adventure starts with a simple search!
               </p>
               <img
-                src={'../src/assets/search-alt.png'}
+                src={'/assets/search-alt.png'}
                 className="w-auto sm:w-2/5 object-cover object-center rounded-md h-44 sm:h-80 mx-auto my-0 sm:my-6"
                 alt="meal-img"
               />
@@ -199,28 +207,41 @@ const Home = () => {
           id="today-recipe"
           className="w-full pt-1 pb-4 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4"
         >
-          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-2">
+          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-0 sm:mb-6">
             Today's recipe
           </p>
-          <div
-            onClick={() => randomRecipe && handleRecipeCardClick(randomRecipe)}
-            className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
-          >
-            <div className="w-full sm:w-2/5 h-full">
-              <img
-                src={randomRecipe?.strMealThumb || 'no-img.jpg'}
-                className="w-full h-full object-cover object-center rounded-tl-md rounded-tr-md sm:rounded-tr-none rounded-bl-none sm:rounded-bl-md"
-                alt="meal-img"
-              />
+          {loadingRandomRecipe ? (
+            <div className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer">
+              <div className="bg-slate-300 animate-pulse w-full sm:w-2/5 h-96"></div>
+              <div className="w-full sm:w-3/5 flex flex-col gap-2 sm:gap-6 p-6">
+                <p className="w-1/2 h-8 bg-slate-300 animate-pulse"></p>
+                <p className="w-1/3 h-6 bg-slate-300 animate-pulse"></p>
+                <p className="w-1/3 h-6 bg-slate-300 animate-pulse"></p>
+              </div>
             </div>
-            <div className="w-full sm:w-3/5 flex flex-col gap-2 sm:gap-6 p-6">
-              <p className="text-xl sm:text-2xl">{randomRecipe?.strMeal}</p>
-              <p className="text-xs sm:text-sm">
-                {randomRecipe?.strInstructions}
-              </p>
-              <p className="text-sm sm:text-base">{randomRecipe?.strTags}</p>
+          ) : (
+            <div
+              onClick={() =>
+                randomRecipe && handleRecipeCardClick(randomRecipe)
+              }
+              className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
+            >
+              <div className="w-full sm:w-2/5 h-full">
+                <img
+                  src={randomRecipe?.strMealThumb || 'no-img.jpg'}
+                  className="w-full h-full object-cover object-center rounded-tl-md rounded-tr-md sm:rounded-tr-none rounded-bl-none sm:rounded-bl-md"
+                  alt="meal-img"
+                />
+              </div>
+              <div className="w-full sm:w-3/5 flex flex-col gap-2 sm:gap-6 p-6">
+                <p className="text-xl sm:text-2xl">{randomRecipe?.strMeal}</p>
+                <p className="text-xs sm:text-sm">
+                  {limitText(randomRecipe?.strInstructions, 100)}
+                </p>
+                <p className="text-sm sm:text-base truncate w-64 sm:w-80">{randomRecipe?.strTags}</p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
