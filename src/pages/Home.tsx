@@ -10,11 +10,13 @@ import {FiExternalLink} from 'react-icons/fi';
 import {homepageImages, limitText} from '../modules/constants';
 import {useNavigate} from 'react-router-dom';
 import {RecipeInfoType, RecipeResponse} from '../modules/types';
+import {motion} from 'framer-motion';
 
 const Home = () => {
   const [recipes, setRecipes] = useState<RecipeInfoType[]>([]);
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
   const [loadingRandomRecipe, setLoadingRandomRecipe] =
     useState<boolean>(false);
   const [randomHomeImage, setRandomHomeImage] = useState<string>('');
@@ -36,6 +38,11 @@ const Home = () => {
       );
       setLoading(false);
       setRecipes(response?.data?.meals);
+      if (!response?.data?.meals?.length) {
+        setErrorMsg('No results found! Try with different search term.');
+      } else {
+        setErrorMsg('');
+      }
       console.log(response);
     } catch (error) {
       setLoading(false);
@@ -92,16 +99,26 @@ const Home = () => {
 
   return (
     <>
-      <div className="bg-white min-h-screen">
+      <div className="bg-white min-h-screen dark:bg-slate-900">
         <div
           className="h-96 sm:h-screen bg-cover bg-center w-full flex flex-col items-center gap-16 justify-center px-12 py-8"
           style={{
             backgroundImage: `url(${randomHomeImage})`,
           }}
         >
-          <p className="text-4xl sm:text-5xl md:text-8xl font-bold text-white  font-poppins drop-shadow-xl w-full text-center">
+          <motion.p
+            className="text-4xl sm:text-5xl md:text-8xl font-bold text-white  font-poppins drop-shadow-xl w-full text-center"
+            initial={{x: '-100%'}}
+            animate={{x: 0, rotate: [0, -5, 5, -5, 0]}}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 30,
+              delay: 0.5,
+            }}
+          >
             Discover tasty recipes everyday
-          </p>
+          </motion.p>
           <button
             onClick={handleScrollToRecipe}
             className="relative w-2/3 sm:w-1/3 inline-flex overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
@@ -113,23 +130,31 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12 py-8 items-center text-gray-500">
+        <div className="flex flex-col gap-8 px-4 sm:px-8 md:px-12 py-8 items-center text-gray-500 dark:text-white">
           <p className="text-xl sm:text-4xl md:text-5xl font-bold font-poppins">
             Search Your Favourite Recipes
           </p>
-          <div className="flex justify-center items-center border-2 border-gray-500 rounded-full w-full sm:w-6/11">
+          <div className="flex justify-center items-center border-2 border-gray-500 dark:border-white rounded-full w-full sm:w-6/11">
             <input
               id="target-section"
               type="text"
               placeholder="Search..."
-              className="outline-none px-6 w-full h-12 sm:h-14 md:h-16 rounded-full"
+              className="outline-none px-6 w-full h-12 sm:h-14 md:h-16 rounded-full dark:text-white"
               onChange={handleSearchChange}
             />
           </div>
 
+          {errorMsg ? (
+            <div className="text-sm sm:text-xl text-white">
+              <p className="font-poppins text-gray-500 dark:text-white text-center">
+                {errorMsg}
+              </p>
+            </div>
+          ) : null}
+
           {!recipes?.length && !loading ? (
             <div>
-              <p className="text-lg sm:text-2xl md:text-3xl font-poppins text-gray-500 text-center">
+              <p className="text-lg sm:text-2xl md:text-3xl font-poppins text-gray-500 dark:text-white text-center">
                 Your culinary adventure starts with a simple search!
               </p>
               <img
@@ -143,7 +168,7 @@ const Home = () => {
               {[0, 1, 2, 3, 4, 5]?.map((r) => (
                 <div
                   key={r}
-                  className="relative cursor-pointer rounded-md shadow-new h-[450px] min-w-full sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px]"
+                  className="dark:bg-slate-700 relative cursor-pointer rounded-md shadow-new h-[450px] min-w-full sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px]"
                 >
                   <div className="bg-slate-300 animate-pulse w-full object-cover object-center rounded-tl-md rounded-tr-md h-3/5"></div>
                   <div className="p-4 flex flex-col gap-2 w-full">
@@ -164,7 +189,7 @@ const Home = () => {
                 <div
                   key={r?.idMeal}
                   onClick={() => handleRecipeCardClick(r)}
-                  className="relative cursor-pointer rounded-md shadow-new h-[450px] min-w-[150px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px] hover:scale-110 ease-in-out duration-300"
+                  className="dark:bg-slate-700 relative cursor-pointer rounded-md shadow-new h-[450px] min-w-[150px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[320px] hover:scale-110 ease-in-out duration-300"
                 >
                   <img
                     src={r?.strMealThumb ? r?.strMealThumb : 'no-img.jpg'}
@@ -172,15 +197,15 @@ const Home = () => {
                     alt="meal-img"
                   />
                   <div className="p-4 flex flex-col gap-2">
-                    <p className="text-gray-500 font-semibold mx-auto text-lg truncate w-[300px]">
+                    <p className="text-gray-500 dark:text-white font-semibold mx-auto text-lg truncate w-[300px]">
                       {r?.strMeal}
                     </p>
-                    <div className="border text-gray-200 w-full"></div>
+                    <div className="border text-gray-200 dark:text-white w-full"></div>
                     <div className="flex gap-4 mx-auto">
-                      <div className="flex gap-1 items-center text-gray-500">
+                      <div className="flex gap-1 items-center text-gray-500 dark:text-white">
                         <BiWorld /> <p className="text-sm">{r?.strArea}</p>
                       </div>
-                      <div className="flex gap-1 items-center text-gray-500">
+                      <div className="flex gap-1 items-center text-gray-500 dark:text-white">
                         <MdCategory />{' '}
                         <p className="text-sm">{r?.strCategory}</p>
                       </div>
@@ -189,7 +214,7 @@ const Home = () => {
                       href={r?.strSource}
                       onClick={(e) => e.stopPropagation()}
                       target="_blank"
-                      className="text-sm text-gray-500 hover:text-gray-700 mx-auto flex gap-1 items-center"
+                      className="text-sm text-gray-500 hover:text-gray-700 dark:text-white mx-auto flex gap-1 items-center"
                     >
                       <FiExternalLink /> Source
                     </a>
@@ -207,12 +232,12 @@ const Home = () => {
           id="today-recipe"
           className="w-full pt-1 pb-4 sm:py-8 md:py-12 flex flex-col items-center justify-center gap-4"
         >
-          <p className="text-gray-500 text-2xl sm:text-4xl md:text-5xl mb-0 sm:mb-6">
+          <p className="text-gray-500 dark:text-white text-2xl sm:text-4xl md:text-5xl mb-0 sm:mb-6">
             Today's recipe
           </p>
           {loadingRandomRecipe ? (
             <div className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer">
-              <div className="bg-slate-300 animate-pulse w-full sm:w-2/5 h-96"></div>
+              <div className="bg-slate-300 animate-pulse w-full sm:w-2/5 h-96 rounded-tl-md rounded-tr-md sm:rounded-tr-none rounded-bl-none sm:rounded-bl-md"></div>
               <div className="w-full sm:w-3/5 flex flex-col gap-2 sm:gap-6 p-6">
                 <p className="w-1/2 h-8 bg-slate-300 animate-pulse"></p>
                 <p className="w-1/3 h-6 bg-slate-300 animate-pulse"></p>
@@ -224,7 +249,7 @@ const Home = () => {
               onClick={() =>
                 randomRecipe && handleRecipeCardClick(randomRecipe)
               }
-              className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 font-poppins cursor-pointer"
+              className="flex flex-col sm:flex-row items-center h-auto shadow-new rounded-md w-11/12 sm:w-8/12 dark:bg-slate-700 text-gray-500 dark:text-white font-poppins cursor-pointer"
             >
               <div className="w-full sm:w-2/5 h-full">
                 <img
@@ -238,7 +263,9 @@ const Home = () => {
                 <p className="text-xs sm:text-sm">
                   {limitText(randomRecipe?.strInstructions, 100)}
                 </p>
-                <p className="text-sm sm:text-base truncate w-64 sm:w-80">{randomRecipe?.strTags}</p>
+                <p className="text-sm sm:text-base truncate w-64 sm:w-80">
+                  {randomRecipe?.strTags}
+                </p>
               </div>
             </div>
           )}

@@ -5,13 +5,17 @@ import {Link} from 'react-router-dom';
 import {IoSearch} from 'react-icons/io5';
 import {FaUtensils} from 'react-icons/fa';
 import {GiHamburgerMenu} from 'react-icons/gi';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import {IoSunnyOutline} from 'react-icons/io5';
+import {IoMoonOutline} from 'react-icons/io5';
+import {darkModeContext} from '../App';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const location = useLocation();
   // const navigate = useNavigate();
+  const {darkMode, setDarkMode} = useContext(darkModeContext)!;
 
   const pathNameArr = [
     {
@@ -32,11 +36,17 @@ const Navbar = () => {
     }
   };
 
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('selectedTheme', JSON.stringify(newDarkMode));
+  };
+
   console.log(location?.pathname, 'location');
 
   return (
     <>
-      <div className="z-50 w-full text-gray-500 px-6 py-6 sm:px-16">
+      <div className="z-50 w-full text-gray-500 px-6 py-6 sm:px-16 dark:bg-slate-900">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link
@@ -60,23 +70,45 @@ const Navbar = () => {
                   pathObj?.path === location?.pathname
                     ? 'text-red-500 scale-105'
                     : ''
-                } hover:text-red-500 text-xs sm:text-lg hover:scale-105 duration-300 ease-in-out font-poppins font-semibold`}
+                } hover:text-red-500 dark:text-white text-xs sm:text-lg hover:scale-105 duration-300 ease-in-out font-poppins font-semibold`}
               >
                 {pathObj?.pathName}
               </NavLink>
             ))}
+            <button
+              onClick={toggleDarkMode}
+              title="theme"
+              className="bg-transparent dark:bg-gray-500 p-2 rounded-md flex justify-center items-center text-white cursor-pointer outline-1 outline-gray-500"
+            >
+              {darkMode ? (
+                <IoSunnyOutline />
+              ) : (
+                <IoMoonOutline className="text-gray-500" />
+              )}
+            </button>
             {location?.pathname === '/' ? (
               <button onClick={handleScroll} className="">
-                <IoSearch className="text-xl cursor-pointer" />
+                <IoSearch className="text-xl cursor-pointer dark:text-white" />
               </button>
             ) : null}
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="sm:hidden flex items-center">
+          <div className="sm:hidden flex items-center gap-4">
+            <button
+              onClick={toggleDarkMode}
+              title="theme"
+              className="bg-transparent dark:bg-gray-500 p-1 rounded-md flex justify-center items-center text-white cursor-pointer outline-1 outline-gray-500"
+            >
+              {darkMode ? (
+                <IoSunnyOutline />
+              ) : (
+                <IoMoonOutline className="text-gray-500" />
+              )}
+            </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-500 text-2xl"
+              className="text-gray-500 dark:text-white text-2xl"
             >
               <GiHamburgerMenu />
             </button>
@@ -94,7 +126,7 @@ const Navbar = () => {
                   pathObj?.path === location?.pathname
                     ? 'text-red-500 scale-105'
                     : ''
-                } text-lg hover:text-red-500 font-poppins font-semibold text-center`}
+                } text-lg hover:text-red-500 dark:text-white font-poppins font-semibold text-center`}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {pathObj?.pathName}
