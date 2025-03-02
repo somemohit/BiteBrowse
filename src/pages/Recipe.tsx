@@ -35,8 +35,8 @@ const Recipe = () => {
   return (
     <>
       {loading ? (
-        <div className="flex items-center justify-center my-6">
-          <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500">
+        <div className="flex justify-center py-6 dark:bg-slate-900 h-screen w-full">
+          <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 dark:bg-slate-700">
             <div className="w-full h-80 bg-slate-300 animate-pulse rounded-md"></div>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 justify-between items-center">
               <div className="flex gap-4 items-center">
@@ -62,14 +62,14 @@ const Recipe = () => {
           </div>
         </div>
       ) : (
-        <div className="relative flex items-center justify-center my-7 sm:my-6">
+        <div className="flex items-center justify-center py-7 sm:py-6 dark:bg-slate-900">
+          <div className="relative flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500 dark:text-white dark:bg-slate-700">
           <button
             onClick={() => navigate(-1)}
-            className="absolute -top-8 sm:top-0 left-2 sm:left-20 cursor-pointer text-3xl text-gray-500"
+            className="absolute -top-7 sm:-top-3 -left-1 sm:-left-20 cursor-pointer text-3xl text-gray-500"
           >
             <MdOutlineKeyboardBackspace />
           </button>
-          <div className="flex flex-col gap-4 p-4 shadow-new rounded-md w-11/12 sm:w-8/12 text-gray-500">
             <div className="w-full h-80">
               <img
                 src={recipeInfo?.strMealThumb || 'no-img.jpg'}

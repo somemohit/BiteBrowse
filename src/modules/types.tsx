@@ -31,3 +31,7 @@ export interface WatchHistoryContextType {
   setWatchHistory: React.Dispatch<React.SetStateAction<RecipeInfoType[]>>;
   watchHistory: RecipeInfoType[];
 }
+export interface DarkModeContextType {
+  darkMode: boolean;
+  setDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+}
